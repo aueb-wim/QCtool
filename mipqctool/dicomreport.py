@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 import datetime
 import time
 import os
+import platform
 import shutil
 import json
 import csv
@@ -16,7 +17,8 @@ import multiprocessing as mp
 from multiprocessing import Pool
 
 from jinja2 import Environment, FileSystemLoader
-from weasyprint import HTML
+if platform.system() != 'Windows':
+    from weasyprint import HTML
 import pydicom
 
 from mipqctool.config import LOGGER
@@ -124,9 +126,10 @@ class DicomReport(object):
         mrivisitpath = os.path.join(directory, 'mri_visits.csv')
         if os.path.isfile(mrivisitpath):
             os.remove(mrivisitpath)
-        
-        pdfreportpath = os.path.join(directory, 'dicom_report.pdf')
-        self.printpdf(pdfreportpath)
+        # pdf printing is not available on Windows
+        if platform.system() != 'Windows':
+            pdfreportpath = os.path.join(directory, 'dicom_report.pdf')
+            self.printpdf(pdfreportpath)
 
         if len(self.__patients) > 0:
             self.__validseq2csv(vseqfilepath)

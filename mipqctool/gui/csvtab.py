@@ -1,6 +1,7 @@
 import os
 import csv
 import json
+import platform
 
 from tkinter import ttk
 import tkinter as tk
@@ -18,6 +19,7 @@ from mipqctool.config import LOGGER
 class CsvTab(tk.Frame):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.platform = platform.system()
         self.float_validation = self.register(is_number)
         # outlier threshold 
         self.outlier_threshold = tk.StringVar()
@@ -67,6 +69,8 @@ class CsvTab(tk.Frame):
                                                   text='Pdf',
                                                   variable=self.report_type,
                                                   value=2)
+        if self.platform == 'Windows':
+            self.report_radiobutton2.config(state='disabled')
         self.threshold_label1 = tk.Label(self.tblabelframe_output,
                                          text='Outlier Threshold (in Standard Deviations):')
         self.threshold_entry1 = tk.Entry(self.tblabelframe_output, width=5,

@@ -7,11 +7,13 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import os
+import platform
 from collections import namedtuple, OrderedDict
 
 # for testing htlm2pdf columnreport template
 from jinja2 import Environment, FileSystemLoader
-from weasyprint import HTML
+if platform.system() != 'Windows':
+    from weasyprint import HTML
 
 from mipqctool.qcfrictionless import QcField
 from mipqctool import config, qctypes
